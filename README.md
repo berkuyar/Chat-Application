@@ -1,9 +1,10 @@
 # Chat-Application
 This project is a real-time messaging platform built with WebSocket, enabling one-on-one chats and group conversations. It uses modern frontend tools and a Node.js backend. Users can chat in real time, view chat history, create groups, and join them.
- 
-Real-time Messaging Application
 
+Real-time Messaging Application
 This is a real-time messaging application developed using Python, Flask, MySQL, and WebSockets. It supports individual messaging, group chats, and real-time message delivery. The project uses a simple yet effective architecture to handle user authentication, message storage, and live communication.
+
+The application is developed using Python and PyCharm as the IDE. It leverages Flask for backend development and MySQL for database management. The communication between users is achieved with WebSockets, enabling real-time message delivery and group chats.
 
 Features:
 
