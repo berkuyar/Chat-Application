@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    <style>
+        /* Genel Stil */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        /* Kayıt Konteyneri */
+        .register-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Başlık */
+        .register-container h1 {
+            margin-bottom: 1.5rem;
+            color: #444;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        /* Input Alanları */
+        .register-container input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .register-container input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.2);
+            transform: scale(1.02);
+        }
+
+        .register-container input::placeholder {
+            color: #aaa;
+        }
+
+        /* Buton */
+        .register-container button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #6a11cb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-container button:hover {
+            background: #2575fc;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        .register-container button:active {
+            transform: scale(0.95);
+        }
+
+        /* Link */
+        .register-container p {
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .register-container a {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .register-container a:hover {
+            color: #2575fc;
+            text-decoration: underline;
+        }
+
+        /* Hata Mesajı */
+        .error-message {
+            color: #ff4d4d;
+            margin-top: 1rem;
+            font-weight: 500;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>Kayıt Ol</h1>
+        <form id="registerForm">
+            <input type="text" id="kullanici_adi" name="kullanici_adi" required placeholder="Kullanıcı Adı">
+            <input type="email" id="email" name="email" required placeholder="Email">
+            <input type="password" id="sifre" name="sifre" required placeholder="Şifre">
+            <button type="submit">Kayıt Ol</button>
+        </form>
+        <p>Zaten hesabınız var mı? <a href="/login">Giriş Yapın</a></p>
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const kullanici_adi = document.getElementById('kullanici_adi').value;
+            const email = document.getElementById('email').value;
+            const sifre = document.getElementById('sifre').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Hata mesajını temizle
+            errorMessage.textContent = '';
+
+            // Basit validasyon
+            if (!kullanici_adi || !email || !sifre) {
+                errorMessage.textContent = 'Lütfen tüm alanları doldurun.';
+                return;
+            }
+
+            // API'ye istek gönder
+            fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ kullanici_adi, email, sifre }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    window.location.href = '/login';
+                } else {
+                    errorMessage.textContent = data.error || 'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.';
+                }
+            })
+            .catch(() => {
+                errorMessage.textContent = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+            });
+        });
+    </script>
+</body>
+</html>
